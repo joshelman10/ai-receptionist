@@ -29,6 +29,10 @@ MODEL = "claude-opus-4-8"
 # matter what directory the server is launched from (local vs. cloud host).
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Password for the owner dashboard (/leads). Set DASHBOARD_PASSWORD in your
+# environment / on Render. Falls back to a default so local dev still works.
+DASHBOARD_PASSWORD = os.environ.get("DASHBOARD_PASSWORD", "changeme")
+
 # ---------------------------------------------------------------------------
 # The receptionist's "personality" and rules. This is the single most
 # important piece — it's what turns a generic AI into RapidFlow's receptionist.
@@ -210,7 +214,17 @@ def chat():
 
 @app.route("/leads")
 def leads():
-    """A simple dashboard showing every captured lead. The owner's view."""
+    """The owner's private dashboard — password-protected so customers can't see it."""
+    # Simple password gate. The browser shows a native login popup; the owner
+    # types the password (any username). Real accounts come later with a database.
+    auth = request.authorization
+    if not auth or auth.password != DASHBOARD_PASSWORD:
+        return Response(
+            "Owner login required.",
+            401,
+            {"WWW-Authenticate": 'Basic realm="RapidFlow Owner Dashboard"'},
+        )
+
     rows = read_leads()
     rows.reverse()  # newest first
     total = sum(int(r["value"]) for r in rows if r.get("value", "").isdigit())
