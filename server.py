@@ -31,7 +31,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Password for the owner dashboard (/leads). Set DASHBOARD_PASSWORD in your
 # environment / on Render. Falls back to a default so local dev still works.
-DASHBOARD_PASSWORD = os.environ.get("DASHBOARD_PASSWORD", "changeme")
+DASHBOARD_PASSWORD = os.environ.get("DASHBOARD_PASSWORD", "ownerskey123")
 
 # ---------------------------------------------------------------------------
 # The receptionist's "personality" and rules. This is the single most
