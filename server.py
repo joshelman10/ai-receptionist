@@ -246,12 +246,31 @@ def leads():
 <meta http-equiv="refresh" content="15">
 <title>Relay — Owner Dashboard</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%231763e6'/><path d='M12 4.5c3.4 4.3 5 6.8 5 9.1a5 5 0 0 1-10 0c0-2.3 1.6-4.8 5-9.1z' fill='white'/></svg>">
+<script>(function(){{try{{var s=localStorage.getItem('relay-theme');if(s==='dark')document.documentElement.setAttribute('data-theme','dark');}}catch(e){{}}}})();</script>
 <style>
   :root{{--ink:#13203a;--body:#48566c;--muted:#7c8ba3;--line:#e7ecf4;--bg:#f4f7fc;--card:#fff;
     --brand:#1763e6;--brand-d:#0f4fbf;--green:#10b981;--indigo:#6366f1;--amber:#f59e0b;
     --shadow:0 1px 2px rgba(13,27,42,.05),0 12px 30px -14px rgba(13,27,42,.18)}}
+  html[data-theme="dark"]{{--ink:#eaf1ff;--body:#a9b8d0;--muted:#7486a0;--line:#1d2c46;--bg:#091221;--card:#111e33;
+    --brand:#4a90ff;--brand-d:#7badff;--green:#34d399;--indigo:#8b8ff6;--amber:#fbbf24;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -14px rgba(0,0,0,.6)}}
+  .theme-btn{{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--body);display:grid;place-items:center;cursor:pointer;transition:all .15s;margin-left:14px}}
+  .theme-btn:hover{{color:var(--brand);border-color:var(--brand)}}
+  .theme-btn svg{{width:17px;height:17px}}
+  .i-sun{{display:none}}
+  html[data-theme="dark"] .i-sun{{display:block}}
+  html[data-theme="dark"] .i-moon{{display:none}}
+  html[data-theme="dark"] .topbar{{background:var(--card)}}
+  html[data-theme="dark"] th{{background:#0d1a2e}}
+  html[data-theme="dark"] th,html[data-theme="dark"] td{{border-bottom-color:#1a2840}}
+  html[data-theme="dark"] tr:last-child td{{border-bottom:none}}
+  html[data-theme="dark"] .ic.b{{background:#13243f}}
+  html[data-theme="dark"] .ic.g{{background:#10301f}}
+  html[data-theme="dark"] .ic.i{{background:#1c1f3a}}
+  html[data-theme="dark"] .ic.a{{background:#2e2410}}
+  html[data-theme="dark"] .biz .live{{background:#10301f}}
   *{{box-sizing:border-box}}
-  body{{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--body)}}
+  body{{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--body);transition:background .25s,color .25s}}
   a{{text-decoration:none;color:var(--brand)}}
   .topbar{{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}}
   .topbar-in{{max-width:1100px;margin:0 auto;padding:0 28px;height:66px;display:flex;align-items:center;gap:13px}}
@@ -289,6 +308,10 @@ def leads():
   <div class="topbar"><div class="topbar-in">
     <div class="logo"><span class="mark"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M12 2.5c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg></span> Relay <span class="tag">OWNER DASHBOARD</span></div>
     <div class="biz">RapidFlow Plumbing <span class="live"><span class="d"></span> Live</span></div>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
   </div></div>
   <div class="main">
     <h1>Welcome back</h1>
@@ -308,6 +331,7 @@ def leads():
     </div>
     <div class="foot">Every lead above was captured automatically by your AI receptionist — calls you would otherwise have lost to voicemail. · <a href="/">← View customer site</a></div>
   </div>
+<script>function toggleTheme(){{var el=document.documentElement;var now=el.getAttribute('data-theme')==='dark'?'light':'dark';if(now==='dark')el.setAttribute('data-theme','dark');else el.removeAttribute('data-theme');try{{localStorage.setItem('relay-theme',now);}}catch(e){{}}}}</script>
 </body></html>"""
 
 
