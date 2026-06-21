@@ -227,46 +227,88 @@ def leads():
 
     rows = read_leads()
     rows.reverse()  # newest first
-    total = sum(int(r["value"]) for r in rows if r.get("value", "").isdigit())
+    valid = [r for r in rows if r.get("value", "").isdigit()]
+    count = len(valid)
+    total = sum(int(r["value"]) for r in valid)
+    avg = total // count if count else 0
+    month_prefix = datetime.datetime.now().strftime("%Y-%m")
+    this_month = sum(1 for r in valid if r.get("captured_at", "").startswith(month_prefix))
 
     body = "".join(
-        f"<tr><td>{r['captured_at']}</td><td>{r['name']}</td>"
+        f"<tr><td class='dt'>{r['captured_at']}</td><td class='nm'>{r['name']}</td>"
         f"<td>{r['phone']}</td><td>{r['issue']}</td>"
         f"<td>{r['preferred_time']}</td><td class='v'>${int(r['value']):,}</td></tr>"
-        for r in rows if r.get("value", "").isdigit()
-    ) or "<tr><td colspan='6' class='empty'>No leads captured yet — go book one in the chat.</td></tr>"
+        for r in valid
+    ) or "<tr><td colspan='6' class='empty'>No leads yet — book one in the chat and it appears here instantly.</td></tr>"
 
-    return f"""<!DOCTYPE html><html><head><meta charset="utf-8">
-<meta http-equiv="refresh" content="10">
-<title>RapidFlow — Captured Leads</title>
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="15">
+<title>Relay — Owner Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%231763e6'/><path d='M12 4.5c3.4 4.3 5 6.8 5 9.1a5 5 0 0 1-10 0c0-2.3 1.6-4.8 5-9.1z' fill='white'/></svg>">
 <style>
-  body{{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#f6f8fc;color:#1a2b42;padding:32px}}
-  .wrap{{max-width:980px;margin:0 auto}}
-  h1{{font-size:24px;margin:0 0 4px}}
-  .sub{{color:#7c8ba3;margin:0 0 24px;font-size:14px}}
-  .cards{{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}}
-  .card{{background:#fff;border:1px solid #e6ebf2;border-radius:14px;padding:18px 22px;box-shadow:0 8px 24px -12px rgba(16,33,61,.15)}}
-  .card .n{{font-size:26px;font-weight:800}}
-  .card .l{{color:#7c8ba3;font-size:13px;margin-top:2px}}
-  .green{{color:#10b981}}
-  table{{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e6ebf2;border-radius:14px;overflow:hidden}}
-  th,td{{text-align:left;padding:12px 16px;font-size:14px;border-bottom:1px solid #eef2f8}}
-  th{{background:#0d1b2a;color:#fff;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}}
-  td.v{{font-weight:700;color:#10b981}}
-  td.empty{{text-align:center;color:#7c8ba3;padding:30px}}
-  a{{color:#1763e6;text-decoration:none;font-size:14px}}
-</style></head><body><div class="wrap">
-  <h1>Captured Leads</h1>
-  <p class="sub">Auto-refreshes every 10 seconds · saved to leads.csv · <a href="/">← back to site</a></p>
-  <div class="cards">
-    <div class="card"><div class="n">{len(rows)}</div><div class="l">Jobs booked</div></div>
-    <div class="card"><div class="n green">${total:,}</div><div class="l">Revenue captured</div></div>
+  :root{{--ink:#13203a;--body:#48566c;--muted:#7c8ba3;--line:#e7ecf4;--bg:#f4f7fc;--card:#fff;
+    --brand:#1763e6;--brand-d:#0f4fbf;--green:#10b981;--indigo:#6366f1;--amber:#f59e0b;
+    --shadow:0 1px 2px rgba(13,27,42,.05),0 12px 30px -14px rgba(13,27,42,.18)}}
+  *{{box-sizing:border-box}}
+  body{{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--body)}}
+  a{{text-decoration:none;color:var(--brand)}}
+  .topbar{{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}}
+  .topbar-in{{max-width:1100px;margin:0 auto;padding:0 28px;height:66px;display:flex;align-items:center;gap:13px}}
+  .logo{{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);font-size:19px;letter-spacing:-.02em}}
+  .logo .mark{{width:34px;height:34px;border-radius:9px;background:linear-gradient(150deg,#3b8bff,#0f4fbf);display:grid;place-items:center;color:#fff;box-shadow:0 7px 16px -5px rgba(23,99,230,.55)}}
+  .logo .tag{{font-size:11px;font-weight:700;color:var(--brand-d);background:#eaf1ff;padding:3px 9px;border-radius:999px;letter-spacing:.03em;margin-left:4px}}
+  .biz{{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink);font-weight:600}}
+  .biz .live{{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--green);background:#e7faf2;padding:5px 11px;border-radius:999px}}
+  .biz .live .d{{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.22)}}
+  .main{{max-width:1100px;margin:0 auto;padding:34px 28px 60px}}
+  h1{{font-size:25px;color:var(--ink);margin:0 0 4px;letter-spacing:-.02em}}
+  .sub{{color:var(--muted);font-size:14px;margin:0 0 28px}}
+  .kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:30px}}
+  @media(max-width:820px){{.kpis{{grid-template-columns:repeat(2,1fr)}}}}
+  .kpi{{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}}
+  .kpi .ic{{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:14px}}
+  .kpi .n{{font-size:30px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-.02em}}
+  .kpi .l{{font-size:13px;color:var(--muted);margin-top:7px}}
+  .ic.b{{background:#eaf1ff;color:var(--brand-d)}} .ic.g{{background:#e7faf2;color:var(--green)}}
+  .ic.i{{background:#eef0ff;color:var(--indigo)}} .ic.a{{background:#fef3e2;color:var(--amber)}}
+  .panel{{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}}
+  .panel-head{{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}}
+  .panel-head h2{{font-size:16px;color:var(--ink);margin:0;letter-spacing:-.01em}}
+  .panel-head .meta{{font-size:12.5px;color:var(--muted)}}
+  table{{width:100%;border-collapse:collapse}}
+  th,td{{text-align:left;padding:14px 22px;font-size:14px;border-bottom:1px solid #f0f3f9}}
+  tr:last-child td{{border-bottom:none}}
+  th{{background:#fafbfe;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em}}
+  td.dt{{color:var(--muted);font-size:13px;white-space:nowrap}}
+  td.nm{{font-weight:600;color:var(--ink)}}
+  td.v{{font-weight:700;color:var(--green);white-space:nowrap}}
+  td.empty{{text-align:center;color:var(--muted);padding:44px}}
+  .foot{{margin-top:22px;font-size:12.5px;color:var(--muted)}}
+</style></head><body>
+  <div class="topbar"><div class="topbar-in">
+    <div class="logo"><span class="mark"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M12 2.5c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg></span> Relay <span class="tag">OWNER DASHBOARD</span></div>
+    <div class="biz">RapidFlow Plumbing <span class="live"><span class="d"></span> Live</span></div>
+  </div></div>
+  <div class="main">
+    <h1>Welcome back</h1>
+    <p class="sub">Here's what your AI receptionist captured. Updates automatically every 15 seconds.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="ic b"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></div><div class="n">{count}</div><div class="l">Leads captured</div></div>
+      <div class="kpi"><div class="ic g"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="n">${total:,}</div><div class="l">Revenue captured</div></div>
+      <div class="kpi"><div class="ic i"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div class="n">${avg:,}</div><div class="l">Avg job value</div></div>
+      <div class="kpi"><div class="ic a"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="n">{this_month}</div><div class="l">Booked this month</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Recent leads</h2><span class="meta">Newest first</span></div>
+      <table>
+        <tr><th>Captured</th><th>Name</th><th>Phone</th><th>Problem</th><th>Preferred time</th><th>Est. value</th></tr>
+        {body}
+      </table>
+    </div>
+    <div class="foot">Every lead above was captured automatically by your AI receptionist — calls you would otherwise have lost to voicemail. · <a href="/">← View customer site</a></div>
   </div>
-  <table>
-    <tr><th>Captured</th><th>Name</th><th>Phone</th><th>Problem</th><th>Preferred time</th><th>Est. value</th></tr>
-    {body}
-  </table>
-</div></body></html>"""
+</body></html>"""
 
 
 if __name__ == "__main__":
