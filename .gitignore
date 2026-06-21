@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Captured leads — local data, not code
+leads.csv
+
+# Secrets — never commit your API key
+.env
+
+# Virtual environments
+venv/
+.venv/
