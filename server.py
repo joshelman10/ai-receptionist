@@ -25,6 +25,10 @@ client = anthropic.Anthropic()
 
 MODEL = "claude-opus-4-8"
 
+# Absolute path to this file's folder, so we find index.html / leads.csv no
+# matter what directory the server is launched from (local vs. cloud host).
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # ---------------------------------------------------------------------------
 # The receptionist's "personality" and rules. This is the single most
 # important piece — it's what turns a generic AI into RapidFlow's receptionist.
@@ -100,7 +104,7 @@ def estimate_value(issue: str) -> int:
 
 # Every booking is appended here so a lead is NEVER lost — even if the
 # customer closes the page. The owner can open this file in Excel.
-LEADS_FILE = "leads.csv"
+LEADS_FILE = os.path.join(BASE_DIR, "leads.csv")
 LEAD_FIELDS = ["captured_at", "name", "phone", "issue", "preferred_time", "value"]
 
 def save_lead(booking: dict) -> None:
@@ -131,8 +135,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    # Serve the webpage from this same folder.
-    return send_from_directory(".", "index.html")
+    # Serve the webpage from this file's folder (absolute path — works anywhere).
+    return send_from_directory(BASE_DIR, "index.html")
 
 
 @app.route("/api/chat", methods=["POST"])
