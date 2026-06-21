@@ -273,30 +273,31 @@ def leads():
   body{{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--body);transition:background .25s,color .25s}}
   a{{text-decoration:none;color:var(--brand)}}
   .topbar{{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}}
-  .topbar-in{{max-width:1100px;margin:0 auto;padding:0 28px;height:66px;display:flex;align-items:center;gap:13px}}
-  .logo{{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);font-size:19px;letter-spacing:-.02em}}
+  .topbar-in{{max-width:1300px;margin:0 auto;padding:0 38px;height:78px;display:flex;align-items:center;gap:13px}}
+  .logo{{display:flex;align-items:center;gap:11px;font-weight:800;color:var(--ink);font-size:21px;letter-spacing:-.02em}}
   .logo .mark{{width:34px;height:34px;border-radius:9px;background:linear-gradient(150deg,#3b8bff,#0f4fbf);display:grid;place-items:center;color:#fff;box-shadow:0 7px 16px -5px rgba(23,99,230,.55)}}
   .logo .tag{{font-size:11px;font-weight:700;color:var(--brand-d);background:#eaf1ff;padding:3px 9px;border-radius:999px;letter-spacing:.03em;margin-left:4px}}
   .biz{{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink);font-weight:600}}
   .biz .live{{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--green);background:#e7faf2;padding:5px 11px;border-radius:999px}}
   .biz .live .d{{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.22)}}
-  .main{{max-width:1100px;margin:0 auto;padding:34px 28px 60px}}
-  h1{{font-size:25px;color:var(--ink);margin:0 0 4px;letter-spacing:-.02em}}
-  .sub{{color:var(--muted);font-size:14px;margin:0 0 28px}}
-  .kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:30px}}
+  .main{{max-width:1300px;margin:0 auto;padding:50px 38px 90px}}
+  h1{{font-size:34px;color:var(--ink);margin:0 0 7px;letter-spacing:-.025em}}
+  .sub{{color:var(--muted);font-size:16px;margin:0 0 40px}}
+  .kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:44px}}
   @media(max-width:820px){{.kpis{{grid-template-columns:repeat(2,1fr)}}}}
-  .kpi{{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}}
-  .kpi .ic{{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:14px}}
-  .kpi .n{{font-size:30px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-.02em}}
-  .kpi .l{{font-size:13px;color:var(--muted);margin-top:7px}}
+  .kpi{{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:var(--shadow)}}
+  .kpi .ic{{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;margin-bottom:18px}}
+  .kpi .ic svg{{width:23px;height:23px}}
+  .kpi .n{{font-size:42px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-.025em}}
+  .kpi .l{{font-size:14.5px;color:var(--muted);margin-top:11px}}
   .ic.b{{background:#eaf1ff;color:var(--brand-d)}} .ic.g{{background:#e7faf2;color:var(--green)}}
   .ic.i{{background:#eef0ff;color:var(--indigo)}} .ic.a{{background:#fef3e2;color:var(--amber)}}
   .panel{{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}}
-  .panel-head{{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}}
-  .panel-head h2{{font-size:16px;color:var(--ink);margin:0;letter-spacing:-.01em}}
-  .panel-head .meta{{font-size:12.5px;color:var(--muted)}}
+  .panel-head{{padding:24px 30px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}}
+  .panel-head h2{{font-size:19px;color:var(--ink);margin:0;letter-spacing:-.01em}}
+  .panel-head .meta{{font-size:13px;color:var(--muted)}}
   table{{width:100%;border-collapse:collapse}}
-  th,td{{text-align:left;padding:14px 22px;font-size:14px;border-bottom:1px solid #f0f3f9}}
+  th,td{{text-align:left;padding:18px 30px;font-size:15px;border-bottom:1px solid #f0f3f9}}
   tr:last-child td{{border-bottom:none}}
   th{{background:#fafbfe;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em}}
   td.dt{{color:var(--muted);font-size:13px;white-space:nowrap}}
